@@ -1,7 +1,7 @@
 # Unit 16 | Assignment - Data Journalism and D3
 
 ![Newsroom](https://media.giphy.com/media/v2xIous7mnEYg/giphy.gif)
-
+![update](https://github.com/silentstar29/D3-Data-Journalism-and-D3-HW/blob/master/Images/on1.PNG)
 ## Background
 
 Welcome to the newsroom! You've just accepted a data visualization position for a major metro paper. You're tasked with analyzing the current trends shaping people's lives, as well as creating charts, graphs, and interactive elements to help readers understand your findings.
