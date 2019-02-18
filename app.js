@@ -26,6 +26,7 @@ var chosenYAxis = "healthcare";
 var xTipLabel = "Poverty: ";
 var yTipLabel = "Lacks HealthCare: ";
 
+ // function used for updating circles group with new tooltip
 function updateToolTip(chosenAxis, oneLabel, secondLabel, otherAxis, circlesGroup) {
   
     var toolTip = d3.tip()
@@ -48,13 +49,11 @@ function updateToolTip(chosenAxis, oneLabel, secondLabel, otherAxis, circlesGrou
     return circlesGroup;
   }
 
-
-// Import Data
+// Retrieve data from the CSV file
 d3.csv("data.csv").then(function(data, error) {
     if (error) throw error;
     console.log(data);
-    // Step 1: Parse Data/Cast as numbers
-    // ==============================
+    //  Parse Data
     data.forEach(function(data) {
         data.poverty= +data.poverty;
         data.age= + data.age;
@@ -66,8 +65,7 @@ d3.csv("data.csv").then(function(data, error) {
     });
    
     
-    // Step 2: Create scale functions
-    // ==============================
+    // Create scale functions
     var xLinearScale = d3.scaleLinear()
       .domain([d3.min(data, d => d[chosenXAxis]) * 0.8,
                d3.max(data, d => d[chosenXAxis]) * 1.2
@@ -78,16 +76,14 @@ d3.csv("data.csv").then(function(data, error) {
       .domain([0, d3.max(data, d => d[chosenXAxis])])
       .range([height, 0]);
 
-    // Step 3: Create axis functions
-    // ==============================
+    // Create initial axis functions
     var bottomAxis = d3.axisBottom(xLinearScale);
    
     var leftAxis = d3.axisLeft(yLinearScale);
 
     
     
-    // Step 4: Append Axes to the chart
-    // ==============================
+    // Append both axes to the chart
     var xAxis = chartGroup.append("g")
     .classed("x-axis", true)
     .attr("transform", `translate(0, ${height})`)
@@ -96,8 +92,7 @@ d3.csv("data.csv").then(function(data, error) {
     var yAxis= chartGroup.append("g")
         .call(leftAxis);
 
-// Step 5: Create Circles
-    // ==============================
+// Create Circles
     var circlesGroup = chartGroup.selectAll("circle")
     .data(data)
     .enter()
@@ -109,7 +104,7 @@ d3.csv("data.csv").then(function(data, error) {
     .attr("stroke", "#e3e3e3")
     .attr("opacity", ".5");
 
-    // Create the abbr for each circle
+    // Create state abbr labels
     var circleText = chartGroup.selectAll("circleText")
     .data(data)
     .enter()
@@ -122,7 +117,8 @@ d3.csv("data.csv").then(function(data, error) {
     .attr('font-size',"11px")
     .attr("font-family","sans-serif")
     .text(data => data.abbr)
-    // append x axis; Create group for 3 x-axis labels
+
+    // Create group for 3 x-axis labels
     var xLabelsGroup =chartGroup.append("g")
       .attr("transform", `translate(${width/2},${height-2})`)
       
@@ -148,7 +144,7 @@ d3.csv("data.csv").then(function(data, error) {
       .classed("inactive", true)
       .text("Household Income (Median)");
       
-      // append y axis; Create group for 3 y-axis labels
+      // Create group for 3 y-axis labels
       var yLabelsGroup = chartGroup.append("g")
       .attr("transform", "rotate(-90)")
       
@@ -193,7 +189,7 @@ xLabelsGroup.selectAll("text")
 
      console.log(chosenXAxis)
 
-    // functions here found above csv import
+    
     // updates x scale for new data
     var xLinearScale = d3.scaleLinear()
         .domain([d3.min(data, d => d[chosenXAxis]) * 0.8,
@@ -209,7 +205,6 @@ xLabelsGroup.selectAll("text")
             .call(bottomAxis);
 
       // updates circles with new x values
-      
       circlesGroup.transition()
                     .duration(1000)
                     .attr("cx", d => xLinearScale(d[chosenXAxis]));
@@ -217,8 +212,6 @@ xLabelsGroup.selectAll("text")
       circleText.transition()
                   .duration(1000)
                   .attr("x", d => xLinearScale(d[chosenXAxis]));
-
-    
 
     // changes classes to change bold text
     if (chosenXAxis === "poverty") {
@@ -279,7 +272,6 @@ yLabelsGroup.selectAll("text")
 
     console.log(chosenYAxis)
 
-    // functions here found above csv import
     // updates y scale for new data
     var yLinearScale = d3.scaleLinear()
         .domain([d3.min(data, d => d[chosenYAxis]), d3.max(data, d => d[chosenYAxis])])
